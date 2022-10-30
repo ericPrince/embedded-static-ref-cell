@@ -72,7 +72,7 @@ impl<T> StaticRefcell<T> {
     /// Sets the stored value for this object
     ///
     /// Requires passing in a CriticalSection, such as the one used in `avr_device::interrupt::free`
-    pub fn init(&self, cs: CriticalSection, value: T) {
+    pub fn init(&self, cs: &CriticalSection, value: T) {
         *self.0.borrow(cs).borrow_mut() = Some(value);
     }
 
@@ -98,7 +98,7 @@ impl<T> StaticRefcell<T> {
     /// let cell_value = avr_device::interrupt::free(|cs| cell.borrow(cs, |value| value.data, || -1));
     /// assert_eq!(cell_value, 1);
     /// ```
-    pub fn borrow<F>(&self, cs: CriticalSection, func: fn(&T) -> F, none_func: fn() -> F) -> F {
+    pub fn borrow<F>(&self, cs: &CriticalSection, func: fn(&T) -> F, none_func: fn() -> F) -> F {
         match self.0.borrow(cs).borrow().as_ref() {
             Some(value) => func(value),
             None => none_func(),
@@ -125,7 +125,7 @@ impl<T> StaticRefcell<T> {
     /// ```
     pub fn borrow_mut<F>(
         &self,
-        cs: CriticalSection,
+        cs: &CriticalSection,
         func: fn(&mut T) -> F,
         none_func: fn() -> F,
     ) -> F {

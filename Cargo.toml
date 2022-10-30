@@ -4,4 +4,4 @@ version = "1.0.0"
 edition = "2021"
 
 [dependencies]
-bare-metal = "1.0.0"
+bare-metal = "0.2.5"
