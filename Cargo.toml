@@ -1,0 +1,7 @@
+[package]
+name = "embedded-static-ref-cell"
+version = "1.0.0"
+edition = "2021"
+
+[dependencies]
+bare-metal = "1.0.0"
