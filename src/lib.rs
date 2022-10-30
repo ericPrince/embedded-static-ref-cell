@@ -1,7 +1,7 @@
 //! Implements a pattern for single-threaded AVR MCUs that allows a non-Sync type or a non-const function to be used
 //! in a static variable
 //!
-//! `StaticRefCell` is essentially a wrapper around `avr_device::interrupt::Mutex<RefCell<Option<T>>>`. The mutex uses critical
+//! `StaticRefCell` is essentially a wrapper around `bare_metal::Mutex<RefCell<Option<T>>>`. The mutex uses critical
 //! sections (via `avr_device::interrupt::free`), which are fine for single threaded use. The `Refcell` is needed so we can modify
 //! the underlying data, and the `Option` is needed so the static variable can be initialized with `None`.
 //!
@@ -36,7 +36,7 @@
 //!     loop {
 //!         // get the value in the StaticRefCell and do something with it, or
 //!         // get the value false if the data is None
-//!         let my_value = avr_device::interrupt::free(|cs| MY_DATA.borrow(cs, |value| value, || false);
+//!         let my_value = avr_device::interrupt::free(|cs| MY_DATA.borrow(cs, |value| value, || false));
 //!         // ...
 //!     }
 //! }
