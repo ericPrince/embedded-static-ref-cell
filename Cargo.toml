@@ -1,7 +1,10 @@
 [package]
 name = "embedded-static-ref-cell"
-version = "0.2.5"
+version = "1.0.0"
 edition = "2021"
 
 [dependencies]
-bare-metal = "0.2.5"
+critical-section = "1.1.1"
+
+[dev-dependencies]
+critical-section = {version = "1.1.1", features = ["std"]}
