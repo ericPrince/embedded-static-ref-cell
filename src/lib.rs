@@ -64,12 +64,12 @@
 use core::cell::RefCell;
 use critical_section::{CriticalSection, Mutex};
 
-type MRCO<T> = Mutex<RefCell<Option<T>>>;
+type Mrco<T> = Mutex<RefCell<Option<T>>>;
 
 /// An object that allows for a non-Send/Sync type to be used safely in a static variable
 ///
 /// See the module-level documentation for more details
-pub struct StaticRefCell<T>(MRCO<T>);
+pub struct StaticRefCell<T>(Mrco<T>);
 
 impl<T> StaticRefCell<T> {
     /// Creates a new uninitialized object (stored value as None)
