@@ -110,7 +110,12 @@ impl<T> StaticRefCell<T> {
     /// let cell_value = critical_section::with(|cs| cell.borrow(cs, |value| value.data, || -1));
     /// assert_eq!(cell_value, 1);
     /// ```
-    pub fn borrow<F>(&self, cs: CriticalSection, func: fn(&T) -> F, none_func: fn() -> F) -> F {
+    pub fn borrow<Y, F1: FnOnce(&T) -> Y, F2: FnOnce() -> Y>(
+        &self,
+        cs: CriticalSection,
+        func: F1,
+        none_func: F2,
+    ) -> Y {
         match self.0.borrow_ref(cs).as_ref() {
             Some(value) => func(value),
             None => none_func(),
@@ -139,12 +144,12 @@ impl<T> StaticRefCell<T> {
     /// let cell_value: MyData = critical_section::with(|cs| cell.borrow(cs, |value| value.clone(), || MyData{data: -1}));
     /// assert_eq!(cell_value, MyData{data: 2});
     /// ```
-    pub fn borrow_mut<F>(
+    pub fn borrow_mut<Y, F1: FnOnce(&mut T) -> Y, F2: FnOnce() -> Y>(
         &self,
         cs: CriticalSection,
-        func: fn(&mut T) -> F,
-        none_func: fn() -> F,
-    ) -> F {
+        func: F1,
+        none_func: F2,
+    ) -> Y {
         match self.0.borrow_ref_mut(cs).as_mut() {
             Some(value) => func(value),
             None => none_func(),
